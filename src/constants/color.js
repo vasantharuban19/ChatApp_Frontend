@@ -1,6 +1,7 @@
 export const green = "#25D366";
 export const lightGreen = "#90EE90";
 export const darkGreen = "rgb(23,163,65)";
+export const blue = "#2FC3A8"
 export const orange = "#ea7070";
 export const LightOrange = "rgba(240, 118, 70, 0.8)"
 export const grayColor = "rgba(247,247,247,1)";

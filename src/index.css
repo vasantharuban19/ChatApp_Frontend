@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+.title{
+	color:#2FC3A8
+}
 
 /* dark mode looking scrollbar */
 ::-webkit-scrollbar {

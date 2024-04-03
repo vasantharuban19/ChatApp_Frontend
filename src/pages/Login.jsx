@@ -18,7 +18,7 @@ import { VisuallyHiddenInput } from "../components/styles/StyledComponent";
 import { server } from "../constants/config";
 import { userExists } from "../redux/reducers/auth";
 import { usernameValidator } from "../utils/validators";
-import { bgGradient } from "../constants/color";
+import { bgGradient, blue } from "../constants/color";
 
 const Login = () => {
   const [login, setLogin] = useState(true);
@@ -127,7 +127,7 @@ const Login = () => {
           {login ? (
             <>
               <Typography variant="h5">
-                Login <span className="text-blue-500"> ChatApp</span>
+                Login <span className="title">ChatApp</span>
               </Typography>
               <form
                 style={{
@@ -183,7 +183,7 @@ const Login = () => {
           ) : (
             <>
               <Typography variant="h5">
-                Sign Up <span className="text-blue-500"> ChatApp</span>
+                Sign Up <span className="title">ChatApp</span>
               </Typography>
               <form
                 style={{
