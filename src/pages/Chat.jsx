@@ -179,7 +179,12 @@ const Chat = ({ chatId, user }) => {
         padding={"1rem"}
         spacing={"1rem"}
         bgcolor={grayColor}
-        height={"90%"}
+        height={{
+        xs: "88%",
+        sm: "80%",
+        md: "90%",
+        lg: "90%",
+        }}
         sx={{
           overflowX: "hidden",
           overflowY: "auto",
@@ -204,7 +209,7 @@ const Chat = ({ chatId, user }) => {
           <IconButton
             sx={{
               position: "absolute",
-              left: "1.5rem",
+              left: "1rem",
               rotate: "30deg",
             }}
             onClick={handleFileOpen}
