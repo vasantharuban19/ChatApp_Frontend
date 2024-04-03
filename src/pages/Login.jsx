@@ -53,6 +53,7 @@ const Login = () => {
         },
         config
       );
+      // localStorage.setItem("jwt", JSON.stringify(data))
       dispacth(userExists(data.user));
       toast.success(data.message, { id: toastId });
     } catch (error) {

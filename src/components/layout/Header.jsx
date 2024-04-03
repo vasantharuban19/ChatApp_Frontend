@@ -66,6 +66,7 @@ const Header = () => {
       const { data } = await axios.get(`${server}/api/v1/user/logout`, {
         withCredentials: true,
       });
+      // localStorage.removeItem("jwt")
       dispatch(userNotExists());
       toast.success(data.message);
     } catch (error) {
