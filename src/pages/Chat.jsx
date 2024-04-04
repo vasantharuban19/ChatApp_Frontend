@@ -140,7 +140,7 @@ const Chat = ({ chatId, user }) => {
 
   const alertListener = useCallback(
     ({ data }) => {
-      console.log(data);
+      // console.log(data);
       if (data?.chatId !== chatId) return;
       const messageForAlert = {
         content: data?.message,
@@ -180,10 +180,10 @@ const Chat = ({ chatId, user }) => {
         spacing={"1rem"}
         bgcolor={grayColor}
         height={{
-        xs: "88%",
-        sm: "80%",
-        md: "90%",
-        lg: "90%",
+          xs: "88%",
+          sm: "80%",
+          md: "90%",
+          lg: "90%",
         }}
         sx={{
           overflowX: "hidden",
