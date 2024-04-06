@@ -1,8 +1,11 @@
-# React + Vite
+<h1>This is MERN Stack Project</h1>
+<p>In this project Implementing real-time chat functionality using  MongoDB, Express, ReactJS, NodeJS and Socket.IO. </p>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<h2>Some Features</h2>
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<li>Authentication && Authorization with JWT
+<li>Real-time messaging with Socket.io
+<li>Online user status (Socket.io and React Context)
+<li>Using Redux Toolkit for State Management in React
+<li>Error handling both on the backend and on the frontend
+<li>And finally Deployment for FREE in Render & vercel.com
