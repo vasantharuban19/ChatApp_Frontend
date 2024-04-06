@@ -5,7 +5,7 @@
 
 <li>Authentication & Authorization with JWT
 <li>Real-time messaging with Socket.io
-<li>Online user status (Socket.io and React Context)
+<li>Online user status (Socket.io)
 <li>Using Redux Toolkit for State Management in React
 <li>Error handling both on the backend and on the frontend
 <li>And finally Deployment for FREE in Render & vercel.com
