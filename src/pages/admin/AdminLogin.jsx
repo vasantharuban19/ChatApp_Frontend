@@ -55,7 +55,7 @@ const AdminLogin = () => {
           }}
         >
           <Typography variant="h5">
-            AdminLogin <span className="text-blue-500"> ChatApp</span>
+            AdminLogin <span className="title"> ChatApp</span>
           </Typography>
           <form
             style={{
