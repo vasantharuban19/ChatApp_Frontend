@@ -3,7 +3,7 @@
 
 <h2>Some Features</h2>
 
-<li>Authentication && Authorization with JWT
+<li>Authentication & Authorization with JWT
 <li>Real-time messaging with Socket.io
 <li>Online user status (Socket.io and React Context)
 <li>Using Redux Toolkit for State Management in React
