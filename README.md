@@ -1,11 +1,13 @@
 <h1>This is MERN Stack Project</h1>
-<p>In this project Implementing real-time chat functionality using  MongoDB, Express, ReactJS, NodeJS and Socket.IO. </p>
+<h2>Real-Time Chat Application with Admin Panel (MERN Stack, Socket.IO)</h2>
+<p>This project focuses on implementing real-time chat functionality using the MERN Stack (MongoDB, Express, ReactJS, NodeJS) along with Socket.IO for instant messaging. The application enables seamless communication between users while ensuring security, state management, and deployment on free hosting platforms. </p>
 
-<h2>Some Features</h2>
+<h2>Key Features:</h2>
 
-<li>Authentication & Authorization with JWT
-<li>Real-time messaging with Socket.io
-<li>Online user status (Socket.io)
-<li>Using Redux Toolkit for State Management in React
-<li>Error handling both on the backend and on the frontend
-<li>And finally Deployment for FREE in Render & vercel.com
+<li>Developed a real-time chat application using MongoDB, Express, ReactJS, NodeJS, and Socket.IO.
+<li>Implemented JWT-based authentication & authorization, including role-based access control (RBAC) for users and admins.
+<li>Admin Panel to manage users, messages, and system settings.
+<li>Enabled real-time messaging & online user status tracking using Socket.IO.
+<li>Integrated Redux Toolkit for efficient state management.
+<li>Handled backend & frontend error management for a smooth experience.
+<li>Deployed for free using Render (backend) & Vercel (frontend).
