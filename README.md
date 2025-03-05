@@ -5,7 +5,7 @@
 <h2>Key Features:</h2>
 
 <li>Developed a real-time chat application using MongoDB, Express, ReactJS, NodeJS, and Socket.IO.
-<li>Implemented JWT-based authentication & authorization, including role-based access control (RBAC) for users and admins.
+<li>Implemented JWT-based authentication & authorization, including role-based access control (RBAC)
 <li>Admin Panel to manage users, messages, and system settings.
 <li>Enabled real-time messaging & online user status tracking using Socket.IO.
 <li>Integrated Redux Toolkit for efficient state management.
