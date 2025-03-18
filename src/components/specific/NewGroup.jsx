@@ -43,7 +43,7 @@ const NewGroup = () => {
   const selectMemberHandler = (id) => {
     setSelectedMembers((prev) =>
       prev.includes(id)
-        ? prev.filter((currentElement) => currentElement !== id)
+        ? prev.filter((currentElement) =>  currentElement !== id)
         : [...prev, id]
     );
   };

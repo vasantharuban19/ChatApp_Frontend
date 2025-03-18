@@ -190,8 +190,12 @@ const Chat = ({ chatId, user }) => {
           overflowY: "auto",
         }}
       >
-        {allMessages.map((i) => (
-          <MsgComponent key={i._id} message={i} user={user} />
+        {allMessages.map((i, index) => (
+          <MsgComponent
+            key={i._id || `message-${index}`}
+            message={i}
+            user={user}
+          />
         ))}
 
         {userTyping && <TypingLoader />}
