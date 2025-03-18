@@ -38,9 +38,11 @@
 ---
 
 ## 📸 Screenshots
-
-![Chat Interface](./src/assets/chat-interface.png)  
-![Admin Panel](./src/assets/admin-panel.png)  
+![Signup Page](./src/assets/SignUp.png)  
+![Login Page](./src/assets/login.png)  
+![Chat Interface](./src/assets/ChatPage.png) 
+![Admin Login](./src/assets/AdminLogin.png)  
+![Admin Dashboard](./src/assets/AdminDashboard.png)  
 
 ---
 
