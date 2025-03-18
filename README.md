@@ -39,7 +39,7 @@
 
 ## 📸 Screenshots
 ![Signup Page](./src/assets/SignUp.png)  
-![Login Page](./src/assets/login.png)  
+![Login Page](./src/assets/Login.png)  
 ![Chat Interface](./src/assets/ChatPage.png) 
 ![Admin Login](./src/assets/AdminLogin.png)  
 ![Admin Dashboard](./src/assets/AdminDashboard.png)  
