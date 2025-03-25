@@ -180,9 +180,9 @@ const Chat = ({ chatId, user }) => {
         spacing={"1rem"}
         bgcolor={grayColor}
         height={{
-          xs: "85%",
-          sm: "85%",
-          md: "85%",
+          xs: "90%",
+          sm: "90%",
+          md: "90%",
           lg: "90%",
         }}
         sx={{
@@ -250,4 +250,5 @@ const Chat = ({ chatId, user }) => {
   );
 };
 
-export default AppLayout()(Chat);
+const WrappedChat = AppLayout()(Chat);
+export default WrappedChat;
