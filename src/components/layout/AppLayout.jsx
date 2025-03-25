@@ -73,7 +73,7 @@ const AppLayout = () => (WrappedComponent) => {
     const refetchListener = useCallback(() => {
       refetch();
       navigate("/");
-    }, [refetch,navigate]);
+    }, [refetch, navigate]);
 
     const onlineUsersListener = useCallback((data) => {
       setOnlineUsers(data);
@@ -113,7 +113,7 @@ const AppLayout = () => (WrappedComponent) => {
           </Drawer>
         )}
 
-        <Grid container height={"calc(100vh - 4rem)"}>
+        <Grid container height={"calc(100vh - 5rem)"}>
           <Grid
             item
             sm={4}
