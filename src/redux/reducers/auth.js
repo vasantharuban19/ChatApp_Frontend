@@ -18,6 +18,7 @@ const authSlice = createSlice({
     },
     userNotExists: (state) => {
       state.user = null;
+      state.isAdmin = false;
       state.loader = false;
     },
   },
@@ -32,23 +33,21 @@ const authSlice = createSlice({
         toast.error(action.error.message);
       })
       .addCase(getAdmin.fulfilled, (state, action) => {
-        if(action.payload){
-          state.isAdmin = true;
-        }else{
-          state.isAdmin = false;
-        }
+        state.isAdmin = !!action.payload;
+        state.user = action.payload || null;
       })
-      .addCase(getAdmin.rejected, (state, action) => {
+      .addCase(getAdmin.rejected, (state) => {
         state.isAdmin = false;
+        state.user = null;
       })
       .addCase(adminLogout.fulfilled, (state, action) => {
         state.isAdmin = false;
+        state.user = null;
         toast.success(action.payload);
       })
       .addCase(adminLogout.rejected, (state, action) => {
-        state.isAdmin = true;
         toast.error(action.error.message);
-      })
+      });
   },
 });
 

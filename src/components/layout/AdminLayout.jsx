@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { darkGreen, grayColor, green, lightBlue, matBlack, purple } from "../../constants/color";
+import {
+  darkGreen,
+  grayColor,
+  green,
+  lightBlue,
+  matBlack,
+  purple,
+} from "../../constants/color";
 import { useLocation, Link as LinkComponent, Navigate } from "react-router-dom";
 import {
   Box,
@@ -27,6 +34,9 @@ const Link = styled(LinkComponent)`
   border-radius: 2rem;
   padding: 1rem 1rem;
   color: black;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   &:hover {
     color: rgba(0, 0, 0, 0.55);
   }
@@ -55,47 +65,47 @@ const adminTabs = [
   },
 ];
 
-const SideBar = ({ w = "100%" }) => {
+const SideBar = ({ w = "100%", onClose }) => {
   const location = useLocation();
   const dispatch = useDispatch();
 
   const logoutHandler = () => {
     dispatch(adminLogout());
+    onClose && onClose();
   };
 
   return (
-    <Stack width={w} direction={"column"} p={"3rem"} spacing={"3rem"}>
-      <Typography variant="h5" color={darkGreen}>
+    <Stack width={w} direction="column" p={3} spacing={3}>
+      <Typography variant="h5" color={darkGreen} textAlign="center">
         Chat App
       </Typography>
-
-      <Stack spacing={"1rem"}>
+      <Stack spacing={1}>
         {adminTabs.map((tab) => (
           <Link
             key={tab.path}
             to={tab.path}
             sx={
-              location.pathname === tab.path && {
-                bgcolor: matBlack,
-                color: "white",
-                ":hover": { color: "white" },
-              }
+              location.pathname === tab.path
+                ? {
+                    bgcolor: matBlack,
+                    color: "white",
+                    "&:hover": { color: "white" },
+                  }
+                : {}
             }
+            onClick={onClose}
           >
-            <Stack direction={"row"} alignItems={"center"} spacing={"1rem"}>
-              {tab.icon}
-
-              <Typography>{tab.name}</Typography>
-            </Stack>
+            {tab.icon}
+            <Typography>{tab.name}</Typography>
           </Link>
         ))}
-
-        <Link onClick={logoutHandler}>
-          <Stack direction={"row"} alignItems={"center"} spacing={"1rem"}>
-            <LogoutIcon />
-
-            <Typography>Logout</Typography>
-          </Stack>
+        <Link
+          component="button"
+          onClick={logoutHandler}
+          style={{ background: "none", border: "none", cursor: "pointer" }}
+        >
+          <LogoutIcon />
+          <Typography>Logout</Typography>
         </Link>
       </Stack>
     </Stack>
