@@ -180,9 +180,9 @@ const Chat = ({ chatId, user }) => {
         spacing={"1rem"}
         bgcolor={grayColor}
         height={{
-          xs: "87%",
-          sm: "80%",
-          md: "80%",
+          xs: "86%",
+          sm: "85%",
+          md: "85%",
           lg: "90%",
         }}
         sx={{
