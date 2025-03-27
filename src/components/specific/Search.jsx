@@ -25,6 +25,8 @@ const Search = () => {
 
   const { isSearch } = useSelector((state) => state.misc);
 
+  const loggedInUser = useSelector((state) => state.auth.user);
+
   const [searchUser] = useLazySearchUserQuery();
   const [sendFriendRequest, isLoadingSendFriendRequest] = useAsyncMutation(
     useSendFriendRequestMutation
@@ -44,7 +46,14 @@ const Search = () => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       searchUser(search.value)
-        .then(({ data }) => setUsers(data.users))
+        .then(({ data }) => {
+          if (data?.users) {
+            const filteredUsers = data.users.filter(
+              (user) => user._id !== loggedInUser?._id
+            );
+            setUsers(filteredUsers);
+          }
+        })
         .catch((e) => console.log(e));
     }, 1000);
     return () => clearTimeout(timeout);
