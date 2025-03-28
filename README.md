@@ -21,7 +21,7 @@
 ## 🛠️ Tech Stack
 
 **Frontend:**  
-🖥️ React.js, Redux Toolkit, Bootstrap  
+🖥️ React.js, Redux Toolkit, Mui Material  
 
 **Backend:**  
 ⚙️ Node.js, Express.js, MongoDB  
