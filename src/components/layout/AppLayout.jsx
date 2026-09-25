@@ -63,7 +63,7 @@ const AppLayout = () => (WrappedComponent) => {
         if (data.chatId === chatId) return;
         dispatch(setNewMessagesAlert(data));
       },
-      [chatId]
+      [chatId],
     );
 
     const newRequestListener = useCallback(() => {
@@ -113,7 +113,11 @@ const AppLayout = () => (WrappedComponent) => {
           </Drawer>
         )}
 
-        <Grid container height={"calc(100vh - 5rem)"}>
+        <Grid
+          container
+          height={"calc(100dvh - 5rem)"}
+          sx={{ overflow: "hidden" }}
+        >
           <Grid
             item
             sm={4}

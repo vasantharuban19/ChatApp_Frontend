@@ -28,7 +28,7 @@ const InputBox = styled("input")`
   height: 100%;
   border: none;
   outline: none;
-  padding: 0 3rem;
+  padding: 0 3.5rem;
   border-radius: 1.5rem;
   background-color: ${grayColor};
 `;

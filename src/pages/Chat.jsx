@@ -52,7 +52,7 @@ const Chat = ({ chatId, user }) => {
     oldMessagesChunk.data?.totalPages,
     page,
     setPage,
-    oldMessagesChunk.data?.messages
+    oldMessagesChunk.data?.messages,
   );
   const errors = [
     { isError: chatDetails.isError, error: chatDetails.error },
@@ -117,7 +117,7 @@ const Chat = ({ chatId, user }) => {
       if (data.chatId !== chatId) return;
       setMessages((prev) => [...prev, data.message]);
     },
-    [chatId]
+    [chatId],
   );
 
   const startTypingListener = useCallback(
@@ -126,7 +126,7 @@ const Chat = ({ chatId, user }) => {
       // console.log("start-typing", data);
       setUserTyping(true);
     },
-    [chatId]
+    [chatId],
   );
 
   const stopTypingListener = useCallback(
@@ -135,7 +135,7 @@ const Chat = ({ chatId, user }) => {
       // console.log("stop-typing", data);
       setUserTyping(false);
     },
-    [chatId]
+    [chatId],
   );
 
   const alertListener = useCallback(
@@ -153,7 +153,7 @@ const Chat = ({ chatId, user }) => {
       };
       setMessages((prev) => [...prev, messageForAlert]);
     },
-    [chatId]
+    [chatId],
   );
 
   const eventHandler = {
@@ -176,15 +176,25 @@ const Chat = ({ chatId, user }) => {
       <Stack
         ref={containerRef}
         boxSizing={"border-box"}
-        padding={"1rem"}
-        spacing={"1rem"}
-        bgcolor={grayColor}
-        height={{
-          xs: "86%",
-          sm: "85%",
-          md: "85%",
-          lg: "90%",
+        padding={{
+          xs: "0.5rem",
+          sm: "0.75rem",
+          md: "1rem",
         }}
+        // spacing={"1rem"}
+        spacing={{
+          xs: "0.5rem",
+          sm: "0.75rem",
+          md: "1rem",
+        }}
+        bgcolor={grayColor}
+        // height={{
+        //   xs: "86%",
+        //   sm: "85%",
+        //   md: "85%",
+        //   lg: "90%",
+        // }}
+        height={"calc(100% - 4.5rem)"}
         sx={{
           overflowX: "hidden",
           overflowY: "auto",
@@ -202,19 +212,34 @@ const Chat = ({ chatId, user }) => {
         <div ref={bottomRef} />
       </Stack>
 
-      <form style={{ height: "10%" }} onSubmit={submitHandler}>
+      <form
+        style={{
+          height: "4.5rem",
+          width: "100%",
+        }}
+        onSubmit={submitHandler}
+      >
         <Stack
           direction={"row"}
           height={"100%"}
-          padding={"1rem"}
+          padding={{
+            xs: "0.5rem",
+            sm: "0.75rem",
+            md: "1rem",
+          }}
           alignItems={"center"}
           position={"relative"}
         >
           <IconButton
             sx={{
               position: "absolute",
-              left: "1rem",
+              left: {
+                xs: "0.35rem",
+                sm: "0.75rem",
+                md: "1rem",
+              },
               rotate: "30deg",
+              zIndex: 1,
             }}
             onClick={handleFileOpen}
           >
@@ -233,8 +258,15 @@ const Chat = ({ chatId, user }) => {
               rotate: "-30deg",
               bgcolor: green,
               color: "white",
-              marginLeft: "1rem",
-              padding: "0.5rem",
+              marginLeft: {
+                xs: "0.25rem",
+                sm: "0.5rem",
+                ms: "1rem",
+              },
+              padding: {
+                xs: "0.4rem",
+                sm: "0.5rem",
+              },
               "&:hover": {
                 bgcolor: darkGreen,
               },
