@@ -74,6 +74,7 @@ const Chat = ({ chatId, user }) => {
   // when loading previous messages
   const previousScrollHeight = useRef(0);
   const previousScrollTop = useRef(0);
+  const previousMessagesLength = useRef(0);
 
   // -----------------------------
   // Chat details
@@ -289,7 +290,14 @@ const Chat = ({ chatId, user }) => {
 
       const newMessage = data.message;
 
-      setMessages((prev) => [...prev, newMessage]);
+      setMessages((prev) => {
+        // Prevent duplicate messages
+        if (prev.some((msg) => msg._id === newMessage._id)) {
+          return prev;
+        }
+
+        return [...prev, newMessage];
+      });
 
       // ✓ Delivered
       if (newMessage.sender?._id !== user?._id) {
@@ -492,11 +500,24 @@ const Chat = ({ chatId, user }) => {
   useEffect(() => {
     if (!bottomRef.current) return;
 
-    if (isNearBottomRef.current) {
-      bottomRef.current.scrollIntoView({
-        behavior: "smooth",
-      });
+    const currentLength = messages.length;
+
+    // First render
+    if (previousMessagesLength.current === 0) {
+      previousMessagesLength.current = currentLength;
+      return;
     }
+
+    // Only scroll when a NEW message is added
+    if (currentLength > previousMessagesLength.current) {
+      if (isNearBottomRef.current) {
+        bottomRef.current.scrollIntoView({
+          behavior: "smooth",
+        });
+      }
+    }
+
+    previousMessagesLength.current = currentLength;
   }, [messages]);
   // =====================================================
   // CLEANUP TYPING TIMEOUT
