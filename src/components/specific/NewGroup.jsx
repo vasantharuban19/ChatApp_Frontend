@@ -7,6 +7,7 @@ import {
   Button,
   TextField,
   Skeleton,
+  Box,
 } from "@mui/material";
 import UserItem from "../shared/UserItem";
 import { useInputValidation } from "6pp";
@@ -38,82 +39,195 @@ const NewGroup = () => {
       error,
     },
   ];
+
   useErrors(errors);
 
+  //  Select / unselect member
   const selectMemberHandler = (id) => {
     setSelectedMembers((prev) =>
       prev.includes(id)
-        ? prev.filter((currentElement) =>  currentElement !== id)
-        : [...prev, id]
+        ? prev.filter((currentElement) => currentElement !== id)
+        : [...prev, id],
     );
   };
-  // console.log(selectedMembers);
 
-  const submitHandler = () => {
-    // console.log(groupName.value, selectedMembers);
-    if (!groupName.value) return toast.error("Group name is required");
+  //  Create group
+  const submitHandler = async () => {
+    const trimmedGroupName = groupName.value.trim();
 
-    if (selectedMembers.length < 2)
-      return toast.error("Please select At least 3 member");
+    if (!trimmedGroupName) {
+      return toast.error("Group name is required");
+    }
 
-    newGroup("Creating New Group..", {
-      name: groupName.value,
+    if (selectedMembers.length < 2) {
+      return toast.error("Please select at least 2 friends");
+    }
+
+    const result = await newGroup("Creating new group...", {
+      name: trimmedGroupName,
       members: selectedMembers,
     });
 
-    closeHandler();
+    // Only close if creation succeeded
+    if (result?.success) {
+      resetForm();
+      dispatch(setIsNewGroup(false));
+    }
+  };
+
+  //  Reset form
+  const resetForm = () => {
+    setSelectedMembers([]);
+
+    groupName.changeHandler({
+      target: {
+        value: "",
+      },
+    });
   };
 
   const closeHandler = () => {
+    if (isLoadingNewGroup) return;
+
+    resetForm();
     dispatch(setIsNewGroup(false));
   };
 
   return (
-    <Dialog open={isNewGroup} onClose={closeHandler}>
-      <Stack p={{ xs: "1rem", sm: "2rem" }} width={"20rem"} spacing={"2rem"}>
-        <DialogTitle textAlign="center">New Group</DialogTitle>
+    <Dialog
+      open={isNewGroup}
+      onClose={closeHandler}
+      fullWidth
+      maxWidth="xs"
+      PaperProps={{
+        sx: {
+          borderRadius: {
+            xs: 0,
+            sm: "1rem",
+          },
+          width: "100%",
+          maxHeight: "90vh",
+        },
+      }}
+    >
+      <Stack
+        sx={{
+          p: {
+            xs: "1rem",
+            sm: "1.5rem",
+            md: "2rem",
+          },
+          gap: {
+            xs: "1rem",
+            sm: "1.5rem",
+          },
+          width: "100%",
+          boxSizing: "border-box",
+        }}
+      >
+        {/* Header */}
+        <DialogTitle
+          sx={{
+            textAlign: "center",
+            fontWeight: 600,
+            p: 0,
+          }}
+        >
+          Create New Group
+        </DialogTitle>
 
+        {/* Group name */}
         <TextField
+          fullWidth
           label="Group Name"
+          placeholder="Enter group name"
           value={groupName.value}
           onChange={groupName.changeHandler}
+          disabled={isLoadingNewGroup}
+          autoFocus
         />
 
-        <Typography variant="body1" color="green" textAlign='center'>
-          Members
-        </Typography>
+        {/* Members header */}
+        <Box>
+          <Typography variant="body1" color="primary" fontWeight={600}>
+            Select Members
+          </Typography>
 
-        <Stack>
+          <Typography variant="caption" color="text.secondary">
+            {selectedMembers.length} selected
+            {selectedMembers.length < 2 && " • Select at least 2"}
+          </Typography>
+        </Box>
+
+        {/* Friends list */}
+        <Stack
+          sx={{
+            maxHeight: {
+              xs: "40vh",
+              sm: "350px",
+            },
+            overflowY: "auto",
+            overflowX: "hidden",
+            pr: 0.5,
+
+            "&::-webkit-scrollbar": {
+              width: "5px",
+            },
+
+            "&::-webkit-scrollbar-thumb": {
+              borderRadius: "10px",
+              backgroundColor: "rgba(0,0,0,0.25)",
+            },
+          }}
+        >
           {isLoading ? (
-            <Skeleton />
-          ) : (
-            data?.friends?.map((i) => (
+            <>
+              <Skeleton height={60} />
+              <Skeleton height={60} />
+              <Skeleton height={60} />
+            </>
+          ) : data?.friends?.length > 0 ? (
+            data.friends.map((i) => (
               <UserItem
                 user={i}
                 key={i._id}
                 handler={selectMemberHandler}
                 isAdded={selectedMembers.includes(i._id)}
+                actionType="select"
               />
             ))
+          ) : (
+            <Typography
+              textAlign="center"
+              color="text.secondary"
+              sx={{ py: 3 }}
+            >
+              No friends available
+            </Typography>
           )}
         </Stack>
 
-        <Stack direction={"row"} justifyContent={"space-evenly"}>
+        {/* Actions */}
+        <Stack direction="row" justifyContent="flex-end" spacing={1}>
           <Button
-            variant="text"
             color="error"
             size="large"
             onClick={closeHandler}
+            disabled={isLoadingNewGroup}
           >
             Cancel
           </Button>
+
           <Button
-            variant="text"
             size="large"
             onClick={submitHandler}
-            disabled={isLoadingNewGroup}
+            disabled={
+              isLoadingNewGroup ||
+              selectedMembers.length < 2 ||
+              !groupName.value.trim()
+            }
           >
-            Create
+            {isLoadingNewGroup ? "Creating..." : "Create"}
           </Button>
         </Stack>
       </Stack>

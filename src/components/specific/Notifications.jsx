@@ -27,7 +27,13 @@ const Notifications = () => {
 
   const friendRequestHandler = async ({ _id, accept }) => {
     dispatch(setIsNotification(false));
-    await acceptRequest("Accepting request..", { requestId: _id, accept });
+    await acceptRequest(
+      accept ? "Accepting request.." : "Rejecting request..",
+      {
+        requestId: _id,
+        accept,
+      },
+    );
   };
 
   const handleClose = () => {
@@ -77,7 +83,7 @@ const NotifcationItem = memo(({ sender, _id, handler }) => {
         <Typography
           variant="body1"
           sx={{
-            flexGlow: 1,
+            flexGrow: 1,
             display: "-webkit-flex",
             WebkitLineClamp: 1,
             WebkitBoxOrient: "vertical",
@@ -92,6 +98,7 @@ const NotifcationItem = memo(({ sender, _id, handler }) => {
         <Stack
           direction={{
             xs: "column",
+            sm: "row",
           }}
         >
           <Button onClick={() => handler({ _id, accept: true })}>Accept</Button>

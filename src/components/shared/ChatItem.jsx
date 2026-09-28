@@ -2,7 +2,8 @@ import React, { memo } from "react";
 import { Link } from "../styles/StyledComponent";
 import { Box, Stack, Typography } from "@mui/material";
 import AvatarCard from "./AvatarCard";
-import {motion} from 'framer-motion'
+import { motion } from "framer-motion";
+import { green, darkGreen } from "../../constants/color";
 
 const ChatItem = ({
   avatar = [],
@@ -18,45 +19,88 @@ const ChatItem = ({
   return (
     <Link
       sx={{
-        padding: "0",
+        padding: 0,
+        display: "block",
+        width: "100%",
       }}
       to={`/chat/${_id}`}
       onContextMenu={(e) => handleDeleteChat(e, _id, groupChat)}
     >
       <motion.div
-       initial={{ opacity: 0, y: "-100%" }}
-       whileInView={{ opacity: 1, y: 0 }}
-       transition={{delay: 0.1 * index}}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: 0.2,
+          delay: Math.min(index * 0.05, 0.3),
+        }}
         style={{
           display: "flex",
-          gap: "1rem",
+          gap: "0.75rem",
           alignItems: "center",
-          padding: "1rem",
-          backgroundColor: sameSender ? "black" : "unset",
-          color: sameSender ? "white" : "unset",
+          padding: "0.75rem 1rem", // ⭐ CHANGED
+          backgroundColor: sameSender ? darkGreen : "transparent",
+          color: sameSender ? "white" : "inherit",
           position: "relative",
+          width: "100%", //
+          boxSizing: "border-box",
+          minWidth: 0,
+          cursor: "pointer",
+        }}
+        whileHover={{
+          backgroundColor: sameSender ? darkGreen : "rgba(0, 0, 0, 0.05)",
         }}
       >
         <AvatarCard avatar={avatar} />
 
-        <Stack>
-          <Typography>{name}</Typography>
+        <Stack
+          spacing={0.25}
+          sx={{
+            flex: 1,
+            minWidth: 0,
+            paddingRight: "1.5rem",
+          }}
+        >
+          <Typography
+            noWrap
+            sx={{
+              fontWeight: sameSender ? 600 : 500,
+              fontSize: {
+                xs: "0.9rem",
+                sm: "0.95rem",
+              },
+            }}
+          >
+            {name}
+          </Typography>
+
           {newMessageAlert && (
-            <Typography>{newMessageAlert.count} New Message</Typography>
+            <Typography
+              variant="caption"
+              sx={{
+                color: sameSender ? "rgba(255,255,255,0.8)" : "text.secondary",
+                fontWeight: 500,
+              }}
+            >
+              {newMessageAlert.count}{" "}
+              {newMessageAlert.count === 1 ? "New Message" : "New Messages"}
+            </Typography>
           )}
         </Stack>
 
         {isOnline && (
           <Box
             sx={{
-              width: "10px",
-              height: "10px",
+              width: "9px",
+              height: "9px",
+              minWidth: "9px",
               borderRadius: "50%",
-              backgroundColor: "green",
+              backgroundColor: green,
               position: "absolute",
               top: "50%",
-              right: "1rem",
+              right: "0.75rem",
               transform: "translateY(-50%)",
+              border: "2px solid white",
+              boxSizing: "content-box",
             }}
           />
         )}

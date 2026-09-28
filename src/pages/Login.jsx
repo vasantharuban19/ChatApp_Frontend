@@ -18,7 +18,7 @@ import { VisuallyHiddenInput } from "../components/styles/StyledComponent";
 import { server } from "../constants/config";
 import { userExists } from "../redux/reducers/auth";
 import { usernameValidator } from "../utils/validators";
-import { bgGradient, blue } from "../constants/color";
+import { bgGradient } from "../constants/color";
 
 const Login = () => {
   const [login, setLogin] = useState(true);
@@ -31,12 +31,15 @@ const Login = () => {
   const username = useInputValidation("", usernameValidator);
   const password = useInputValidation("");
   const avatar = useFileHandler("single");
-  const dispacth = useDispatch();
+
+  const dispatch = useDispatch();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     const toastId = toast.loading("Logging in...");
     setIsLoading(true);
+
     const config = {
       withCredentials: true,
       headers: {
@@ -48,13 +51,17 @@ const Login = () => {
       const { data } = await axios.post(
         `${server}/api/v1/user/login`,
         {
-          username: username.value,
+          username: username.value.trim(),
           password: password.value,
         },
-        config
+        config,
       );
-      dispacth(userExists(data.user));
-      toast.success(data.message, { id: toastId });
+
+      dispatch(userExists(data.user));
+
+      toast.success(data.message, {
+        id: toastId,
+      });
     } catch (error) {
       toast.error(error?.response?.data?.message || "Something went wrong", {
         id: toastId,
@@ -66,13 +73,20 @@ const Login = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+
+    if (!avatar.file) {
+      return toast.error("Please select a profile picture");
+    }
+
     const toastId = toast.loading("Signing up...");
     setIsLoading(true);
+
     const formData = new FormData();
+
     formData.append("avatar", avatar.file);
-    formData.append("name", name.value);
-    formData.append("bio", bio.value);
-    formData.append("username", username.value);
+    formData.append("name", name.value.trim());
+    formData.append("bio", bio.value.trim());
+    formData.append("username", username.value.trim());
     formData.append("password", password.value);
 
     const config = {
@@ -86,12 +100,16 @@ const Login = () => {
       const { data } = await axios.post(
         `${server}/api/v1/user/signup`,
         formData,
-        config
+        config,
       );
-      dispacth(userExists(data.user));
-      toast.success(data.message, { id: toastId });
+
+      dispatch(userExists(data.user));
+
+      toast.success(data.message, {
+        id: toastId,
+      });
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Something Went Wrong", {
+      toast.error(error?.response?.data?.message || "Something went wrong", {
         id: toastId,
       });
     } finally {
@@ -100,34 +118,42 @@ const Login = () => {
   };
 
   return (
-    <div 
-    style={{
-      backgroundImage: bgGradient,
-    }}>
+    <div
+      style={{
+        backgroundImage: bgGradient,
+        minHeight: "100vh",
+      }}
+    >
       <Container
-        component={"main"}
+        component="main"
         maxWidth="xs"
         sx={{
-          height: "100vh",
+          minHeight: "100vh",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          py: 2,
         }}
       >
         <Paper
           elevation={3}
           sx={{
+            width: "100%",
             padding: 4,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            borderRadius: 3,
           }}
         >
           {login ? (
             <>
-              <Typography variant="h5">
+              {/* ================= LOGIN ================= */}
+
+              <Typography variant="h5" fontWeight={600}>
                 Login <span className="title">ChatApp</span>
               </Typography>
+
               <form
                 style={{
                   width: "100%",
@@ -143,7 +169,9 @@ const Login = () => {
                   variant="outlined"
                   value={username.value}
                   onChange={username.changeHandler}
+                  autoComplete="username"
                 />
+
                 <TextField
                   required
                   fullWidth
@@ -153,7 +181,9 @@ const Login = () => {
                   variant="outlined"
                   value={password.value}
                   onChange={password.changeHandler}
+                  autoComplete="current-password"
                 />
+
                 <Button
                   sx={{
                     marginTop: "1rem",
@@ -164,11 +194,13 @@ const Login = () => {
                   type="submit"
                   disabled={isLoading}
                 >
-                  Login
+                  {isLoading ? "Logging in..." : "Login"}
                 </Button>
-                <Typography textAlign={"center"} m={"1rem"}>
+
+                <Typography textAlign="center" m="1rem" color="text.secondary">
                   OR
                 </Typography>
+
                 <Button
                   fullWidth
                   variant="text"
@@ -181,9 +213,12 @@ const Login = () => {
             </>
           ) : (
             <>
-              <Typography variant="h5">
+              {/* ================= SIGN UP ================= */}
+
+              <Typography variant="h5" fontWeight={600}>
                 Sign Up <span className="title">ChatApp</span>
               </Typography>
+
               <form
                 style={{
                   width: "100%",
@@ -191,7 +226,9 @@ const Login = () => {
                 }}
                 onSubmit={handleSignUp}
               >
-                <Stack position={"relative"} width={"10rem"} margin={"auto"}>
+                {/* Avatar */}
+
+                <Stack position="relative" width="10rem" margin="auto">
                   <Avatar
                     sx={{
                       width: "10rem",
@@ -204,36 +241,39 @@ const Login = () => {
                   <IconButton
                     sx={{
                       position: "absolute",
-                      bottom: "0",
-                      right: "0",
+                      bottom: 0,
+                      right: 0,
                       color: "white",
                       bgcolor: "rgba(0,0,0,0.5)",
+
                       ":hover": {
                         bgcolor: "rgba(0,0,0,0.8)",
                       },
                     }}
                     component="label"
                   >
-                    <>
-                      <CameraAltIcon />
-                      <VisuallyHiddenInput
-                        type="file"
-                        onChange={avatar.changeHandler}
-                      />
-                    </>
+                    <CameraAltIcon />
+
+                    <VisuallyHiddenInput
+                      type="file"
+                      accept="image/*"
+                      onChange={avatar.changeHandler}
+                    />
                   </IconButton>
                 </Stack>
+
                 {avatar.error && (
                   <Typography
-                    m={"1rem auto"}
-                    width={"fit-content"}
-                    display={"block"}
+                    m="1rem auto"
+                    width="fit-content"
+                    display="block"
                     color="error"
                     variant="caption"
                   >
                     {avatar.error}
                   </Typography>
                 )}
+
                 <TextField
                   required
                   fullWidth
@@ -242,7 +282,9 @@ const Login = () => {
                   variant="outlined"
                   value={name.value}
                   onChange={name.changeHandler}
+                  autoComplete="name"
                 />
+
                 <TextField
                   required
                   fullWidth
@@ -251,7 +293,9 @@ const Login = () => {
                   variant="outlined"
                   value={bio.value}
                   onChange={bio.changeHandler}
+                  autoComplete="off"
                 />
+
                 <TextField
                   required
                   fullWidth
@@ -260,12 +304,15 @@ const Login = () => {
                   variant="outlined"
                   value={username.value}
                   onChange={username.changeHandler}
+                  autoComplete="username"
                 />
+
                 {username.error && (
                   <Typography color="error" variant="caption">
                     {username.error}
                   </Typography>
                 )}
+
                 <TextField
                   required
                   fullWidth
@@ -275,8 +322,9 @@ const Login = () => {
                   variant="outlined"
                   value={password.value}
                   onChange={password.changeHandler}
+                  autoComplete="new-password"
                 />
-                
+
                 <Button
                   sx={{
                     marginTop: "1rem",
@@ -287,11 +335,13 @@ const Login = () => {
                   type="submit"
                   disabled={isLoading}
                 >
-                  Sign Up
+                  {isLoading ? "Signing up..." : "Sign Up"}
                 </Button>
-                <Typography textAlign={"center"} m={"1rem"}>
+
+                <Typography textAlign="center" m="1rem" color="text.secondary">
                   OR
                 </Typography>
+
                 <Button
                   fullWidth
                   variant="text"

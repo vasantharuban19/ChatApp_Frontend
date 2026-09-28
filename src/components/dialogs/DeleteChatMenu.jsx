@@ -17,37 +17,44 @@ const DeleteChatMenu = ({ dispatch, deleteMenuAnchor }) => {
   const navigate = useNavigate();
 
   const { isDeleteMenu, selectedDeleteChat } = useSelector(
-    (state) => state.misc
+    (state) => state.misc,
   );
 
-  const [deleteChat, _, deleteChatData] = useAsyncMutation(
-    useDeleteChatMutation
+  const [deleteChat, , deleteChatData] = useAsyncMutation(
+    useDeleteChatMutation,
   );
 
-  const [leaveGroup, __, leaveGroupData] = useAsyncMutation(
-    useLeaveGroupMutation
+  const [leaveGroup, , leaveGroupData] = useAsyncMutation(
+    useLeaveGroupMutation,
   );
 
-  const isGroup = selectedDeleteChat.groupChat;
+  const isGroup = selectedDeleteChat?.groupChat;
 
   const closeHandler = () => {
     dispatch(setIsDeleteMenu(false));
     deleteMenuAnchor.current = null;
   };
 
+  // Unfriend
+  const unfriendHandler = () => {
+    closeHandler();
+
+    deleteChat("Unfriending...", selectedDeleteChat.chatId);
+  };
+
+  // Leave group
   const leaveGroupHandler = () => {
     closeHandler();
+
     leaveGroup("Leaving group...", selectedDeleteChat.chatId);
   };
 
-  const deleteChatHandler = () => {
-    closeHandler();
-    deleteChat("Deleting chat...", selectedDeleteChat.chatId);
-  };
-
+  // Navigate after successful action
   useEffect(() => {
-    if (deleteChatData || leaveGroupData) navigate("/");
-  }, [deleteChatData, leaveGroupData]);
+    if (deleteChatData || leaveGroupData) {
+      navigate("/");
+    }
+  }, [deleteChatData, leaveGroupData, navigate]);
 
   return (
     <Menu
@@ -65,22 +72,28 @@ const DeleteChatMenu = ({ dispatch, deleteMenuAnchor }) => {
     >
       <Stack
         sx={{
-          width: "10rem",
-          padding: "0.5rem",
+          width: "11rem",
+          padding: "0.7rem",
           cursor: "pointer",
+
+          "&:hover": {
+            backgroundColor: "rgba(0,0,0,0.05)",
+          },
         }}
-        direction={"row"}
-        alignItems={"center"}
-        spacing={"0.5rem"}
-        onClick={isGroup ? leaveGroupHandler : deleteChatHandler}
+        direction="row"
+        alignItems="center"
+        spacing="0.7rem"
+        onClick={isGroup ? leaveGroupHandler : unfriendHandler}
       >
         {isGroup ? (
           <>
-            <ExitToAppIcon /> <Typography>Leave Group</Typography>
+            <ExitToAppIcon color="warning" />
+            <Typography>Leave Group</Typography>
           </>
         ) : (
           <>
-            <DeleteIcon /> <Typography>Delete Chat</Typography>
+            <DeleteIcon color="error" />
+            <Typography>Unfriend</Typography>
           </>
         )}
       </Stack>

@@ -1,36 +1,87 @@
-import { Avatar, AvatarGroup, Box, Stack } from "@mui/material";
+import { Avatar, Box } from "@mui/material";
 import React from "react";
 import { transformImage } from "../../lib/features";
 
 const AvatarCard = ({ avatar = [], max = 4 }) => {
+  const visibleAvatars = avatar.slice(0, max);
+
+  const remainingCount = avatar.length - max;
+
   return (
-    <Stack direction={"row"} spacing={0.5}>
-      <AvatarGroup
-        max={max}
-        sx={{
-          position: "relative",
-        }}
-      >
-        <Box width={"5rem"} height={"3rem"}>
-          {avatar.map((i, index) => (
-            <Avatar
-              key={Math.random() * 100}
-              src={transformImage(i)}
-              alt={`Avatar ${index}`}
-              sx={{
-                width: "3rem",
-                height: "3rem",
-                position: "absolute",
-                left: {
-                  xs: `${0.5 + index}rem`,
-                  sm: `${index}rem`,
-                },
-              }}
-            />
-          ))}
-        </Box>
-      </AvatarGroup>
-    </Stack>
+    <Box
+      sx={{
+        position: "relative",
+        width: {
+          xs: "3.5rem",
+          sm: "4rem",
+        },
+        height: {
+          xs: "3rem",
+          sm: "3.25rem",
+        },
+        flexShrink: 0,
+      }}
+    >
+      {visibleAvatars.map((image, index) => (
+        <Avatar
+          key={image?._id || image || index}
+          src={transformImage(image)}
+          alt={`Avatar ${index + 1}`}
+          sx={{
+            width: {
+              xs: "2.5rem",
+              sm: "2.75rem",
+            },
+            height: {
+              xs: "2.5rem",
+              sm: "2.75rem",
+            },
+            position: "absolute",
+
+            left: {
+              xs: `${index * 0.7}rem`,
+              sm: `${index * 0.8}rem`,
+            },
+
+            top: "50%",
+            transform: "translateY(-50%)",
+
+            border: "2px solid white",
+
+            zIndex: visibleAvatars.length - index,
+          }}
+        />
+      ))}
+
+      {remainingCount > 0 && (
+        <Avatar
+          sx={{
+            width: {
+              xs: "2.5rem",
+              sm: "2.75rem",
+            },
+            height: {
+              xs: "2.5rem",
+              sm: "2.75rem",
+            },
+            position: "absolute",
+            left: {
+              xs: `${Math.min(max, 3) * 0.7}rem`,
+              sm: `${Math.min(max, 3) * 0.8}rem`,
+            },
+            top: "50%",
+            transform: "translateY(-50%)",
+            border: "2px solid white",
+            bgcolor: "grey.500",
+            fontSize: "0.75rem",
+            fontWeight: 600,
+            zIndex: 0,
+          }}
+        >
+          +{remainingCount}
+        </Avatar>
+      )}
+    </Box>
   );
 };
 

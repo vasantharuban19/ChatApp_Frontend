@@ -7,38 +7,57 @@ import {
   Skeleton,
 } from "@mui/material";
 import React, { useState } from "react";
-import { sampleUsers } from "../../constants/sampleData";
 import UserItem from "../shared/UserItem";
-import { useAddGroupMembersMutation, useAvailableFriendsQuery } from "../../redux/api/api";
+
+import {
+  useAddGroupMembersMutation,
+  useAvailableFriendsQuery,
+} from "../../redux/api/api";
+
 import { useAsyncMutation, useErrors } from "../../hooks/hooks";
+
 import { useDispatch, useSelector } from "react-redux";
 import { setIsAddMember } from "../../redux/reducers/misc";
 
 const AddMemberDialog = ({ chatId }) => {
   const dispatch = useDispatch();
+
   const { isAddMember } = useSelector((state) => state.misc);
 
   const { isLoading, data, isError, error } = useAvailableFriendsQuery(chatId);
+
   const [addMembers, isLoadingAddMembers] = useAsyncMutation(
-    useAddGroupMembersMutation
+    useAddGroupMembersMutation,
   );
 
   const [selectedMembers, setSelectedMembers] = useState([]);
 
+  // Add / Remove member from selection
   const selectMemberHandler = (id) => {
     setSelectedMembers((prev) =>
       prev.includes(id)
         ? prev.filter((currentElement) => currentElement !== id)
-        : [...prev, id]
+        : [...prev, id],
     );
   };
 
-  const addMemberSubmitHandler = () => {
-    addMembers("Adding Members...", { members: selectedMembers, chatId });
-    closeHandler();
+  const addMemberSubmitHandler = async () => {
+    if (selectedMembers.length === 0) {
+      return;
+    }
+
+    const result = await addMembers("Adding Members...", {
+      members: selectedMembers,
+      chatId,
+    });
+
+    if (result?.success) {
+      closeHandler();
+    }
   };
 
   const closeHandler = () => {
+    setSelectedMembers([]);
     dispatch(setIsAddMember(false));
   };
 
@@ -46,19 +65,36 @@ const AddMemberDialog = ({ chatId }) => {
 
   return (
     <Dialog open={isAddMember} onClose={closeHandler}>
-      <Stack p={"2rem"} width={"20rem"} spacing={"2rem"}>
+      <Stack
+        p={{ xs: "1rem", sm: "2rem" }}
+        width={{ xs: "90vw", sm: "20rem" }}
+        maxWidth="25rem"
+        spacing={"2rem"}
+      >
         <DialogTitle textAlign={"center"}>Add Member</DialogTitle>
 
-        <Stack spacing={"1rem"}>
+        <Stack
+          spacing={"0.5rem"}
+          maxHeight="50vh"
+          overflow="auto"
+          sx={{
+            overflowX: "hidden",
+          }}
+        >
           {isLoading ? (
-            <Skeleton />
+            <>
+              <Skeleton variant="rounded" height={55} />
+              <Skeleton variant="rounded" height={55} />
+              <Skeleton variant="rounded" height={55} />
+            </>
           ) : data?.friends?.length > 0 ? (
-            data?.friends?.map((i) => (
+            data.friends.map((user) => (
               <UserItem
-                user={i}
-                key={i._id}
+                user={user}
+                key={user._id}
                 handler={selectMemberHandler}
-                isAdded={selectedMembers.includes(i._id)}
+                isAdded={selectedMembers.includes(user._id)}
+                actionType="member"
               />
             ))
           ) : (
@@ -67,26 +103,26 @@ const AddMemberDialog = ({ chatId }) => {
         </Stack>
 
         <Stack
-          direction={"row"}
-          alignItems={"center"}
-          justifyContent={"space-evenly"}
+          direction="row"
+          alignItems="center"
+          justifyContent="space-evenly"
         >
           <Button
             variant="text"
             color="error"
-            // size="large"
             onClick={closeHandler}
+            disabled={isLoadingAddMembers}
           >
             Cancel
           </Button>
+
           <Button
             variant="contained"
             color="success"
-            // size="large"
             onClick={addMemberSubmitHandler}
-            disabled={isLoadingAddMembers}
+            disabled={isLoadingAddMembers || selectedMembers.length === 0}
           >
-            Submit
+            {isLoadingAddMembers ? "Adding..." : "Add Members"}
           </Button>
         </Stack>
       </Stack>

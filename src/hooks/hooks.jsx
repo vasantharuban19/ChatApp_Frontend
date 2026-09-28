@@ -20,6 +20,7 @@ const useAsyncMutation = (mutationHook) => {
 
   const executeMutation = async (toastMessage, ...args) => {
     setIsLoading(true);
+
     const toastId = toast.loading(toastMessage || "Updating data...");
 
     try {
@@ -29,15 +30,37 @@ const useAsyncMutation = (mutationHook) => {
         toast.success(res.data.message || "Updated data successfully", {
           id: toastId,
         });
+
         setData(res.data);
-      } else {
-        toast.error(res?.error?.data?.message || "Something went wrong", {
-          id: toastId,
-        });
+
+        // ⭐ Return success
+        return {
+          success: true,
+          data: res.data,
+        };
       }
+
+      toast.error(res?.error?.data?.message || "Something went wrong", {
+        id: toastId,
+      });
+
+      // ⭐ Return failure
+      return {
+        success: false,
+        error: res?.error,
+      };
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong", { id: toastId });
+
+      toast.error("Something went wrong", {
+        id: toastId,
+      });
+
+      // ⭐ Return failure
+      return {
+        success: false,
+        error,
+      };
     } finally {
       setIsLoading(false);
     }
